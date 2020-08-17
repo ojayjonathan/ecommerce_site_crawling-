@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{%load humanize %}
+<div class="row">
+  <div id="sidebar" class="col-md-3 col-sm-4  span3">
+    <button onclick="closeNav()" type="button" class="close pull-right hidden-sm hidden-md hidden-lg hidden-xl" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  <div class="well well-small">
+    <ul class="nav nav-list">
+      {% for category in product_categories %}
+        {% for i in category.sub_categories %}
+            <li><a href="{% url 'subcategory'  i|slugify %}"><i class="fas fa-chevron-right"></i>{{ i|capfirst}}</a></li>          
+         {% endfor %}
+      {% endfor %}
+        <li style="border:0"> &nbsp;</li>
+    </ul>
+    </div>
+  
+                <div class="well well-small alert alert-warning cntr hidden-xm">
+                    <h2>50% Discount</h2>
+                    <p> 
+                       only valid for online order. <br><br><a class="defaultBtn" href="#">Click here </a>
+                    </p>
+                </div>
+                
+  </div>
+  <div class="col-xs-12 col-sm-8 col-md-9 span9">
+        <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+        <li><a href="{% url 'subcategory' product.category %}">{{product.category}}</a> <span class="divider">/</span></li>
+        <li class="active">Preview</li>
+        </ul>	
+        <div class="well well-small">
+        <div class="row-fluid">
+               <div class="col-xs-12 col-sm-6 cntr">
+                <strong class="discount-tag" >{% if product.per_discount > 0 %}
+                  -{{product.per_discount}}% {% endif %}</strong> 
+                <img class="img-thumbnail" src='{{product.image_src}}' alt="image">
+               </div>
+                <div class="span7 col-xs-12 col-sm-6 " >
+                    <strong >{{product.description}}</strong>
+                    <hr class="soft"/>       
+                    <form class="form-horizontal qtyFrm" method="POST" action="{% url 'cart' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="add_new">
+                      <input type="hidden" name="product_id" value="{{product.id}}">
+                      <input type="hidden" value="{{request.GET.next}}" name="next">
+                      <div class="control-group">
+                        <label class="control-label"><span class="price">Ksh {{product.price|intcomma}}</span>
+                         &nbsp;<del>Ksh {{product.prev_price}}</del>
+                        </label>
+                        <div class="controls">
+                        <input type="number" class="span6" value='1' style="width: 100px;" min='1' name="qty">
+                        </div>
+                      </div>
+                    
+                      <div class="control-group">
+                        <label class="control-label"><span>Color</span></label>
+                        <div class="controls">
+                          <select class="span11">
+                              <option>Red</option>
+                              <option>Purple</option>
+                              <option>Pink</option>
+                              <option>Red</option>
+                            </select>
+                        </div>
+                      </div>
+                      <h4>100 items in stock</h4>
+                      <p>Nowadays the lingerie industry is one of the most successful business spheres.
+                      Nowadays the lingerie industry is one of ...
+                      <p>
+                      <button type="submit" class="btn shopBtn"><span class=" icon-shopping-cart"></span> Add to cart</button>
+                    </form>
+                </div>
+                </div>
+                    <hr class="softn clr"/>
+    
+    
+                <ul id="productDetail" class="nav nav-tabs">
+                  <li class="active"><a href="#home" data-toggle="tab">Product Details</a></li>
+                  <li class=""><a href="#profile" data-toggle="tab">Related Products </a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content tabWrapper">
+                <div class="tab-pane fade active in" id="home">
+                  <h4>Product Information</h4>
+                    <table class="table table-striped">
+                    <tbody>
+                    <tr class="techSpecRow"><td class="techSpecTD1">Color:</td><td class="techSpecTD2">Black</td></tr>
+                    <tr class="techSpecRow"><td class="techSpecTD1">Style:</td><td class="techSpecTD2">Apparel,Sports</td></tr>
+                    <tr class="techSpecRow"><td class="techSpecTD1">Season:</td><td class="techSpecTD2">spring/summer</td></tr>
+                    <tr class="techSpecRow"><td class="techSpecTD1">Usage:</td><td class="techSpecTD2">fitness</td></tr>
+                    <tr class="techSpecRow"><td class="techSpecTD1">Sport:</td><td class="techSpecTD2">122855031</td></tr>
+                    <tr class="techSpecRow"><td class="techSpecTD1">Brand:</td><td class="techSpecTD2">Shock Absorber</td></tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="profile">
+                  {% for p in related_products %}
+            <div class="row">	  
+                  <div class="span4 col-xs-6 col-sm-6" style="position: relative;">
+                    <span class="discount-tag" style="left:30%">{% if p.per_discount > 0 %}
+                      -{{p.per_discount}}% {% endif%}</span>
+                      <img src="{{p.image_src}}" alt="product image" class="img-thumbnail ">
+                  </div>
+            <div class="col-xs-6 col-sm-6">     
+                <div class="span6">
+                    <p>
+                    {{p.description|slice:'35'}}
+                    </p>
+                </div>
+                <div class="span4 alignR">
+                <form class="form-horizontal qtyFrm">
+                <span class='price'>Ksh {{p.price|intcomma}} </span><del>Ksh {{p.prev_price | intcomma}}</del>
+                <label class="checkbox">
+                    <input type="checkbox">  Adds product to compair
+                </label><br>
+                <div class="btn-group">
+                  <a href="{% url 'detail' p.category p.id %}" class="defaultBtn"><span class=" icon-shopping-cart"></span> Add to cart</a>
+                  <a href="{% url 'detail' p.category p.id %}" class="shopBtn">VIEW</a>
+                 </div>
+                    </form>
+                </div>
+              </div> 
+          </div>
+          
+            <hr class="soft">
+            {% endfor %}
+                
+                </div>
+                </div>
+      </div>
+    </div>
+    </div>
+<style>
+</style>
+   <!-- Body wrapper -->
+{% endblock content %}

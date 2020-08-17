@@ -1,0 +1,50 @@
+{% extends 'base_user_profile.html' %}
+{% block profile %}
+<div class="well">
+    <ul class="breadcrumb">
+      <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+      <li><a href="{% url 'profile' request.user %}">Account Overview</a> <span class="divider">/</span></li>
+      <li class="active">{% if add %}Add address {% else %}Edit Address{% endif %} </li>
+      </ul>
+    <hr class="soft">
+      <form method="POST" action="{% if add %}{% url 'address-add' request.user %}
+      {% else %} {% url 'address-edit' request.user address.id %} {% endif %}">
+          {% csrf_token %}
+          <input type="hidden" name="id" value="{{address.id}}">
+          <div class="control-group">
+            <label class="control-label" for="inputFname">Full name </label>
+              <div class="controls">
+                <input type="text" id="FullName" value="{{address.full_name}}" class="form-control" name="full_name">
+                <div class="text-danger">{{form.full_name.errors}}</div>
+              </div>
+           </div>
+           <div class="control-group">
+              <label class="control-label" for="inputLname">County </label>
+              <div class="controls">
+                <input type="text" id="iputCounty" value="{{address.county}}" class="form-control" name="county">
+                <div class="text-danger">{{ form.county.errors}}</div>
+              </div>
+           </div>
+          <div class="control-group">
+            <label class="control-label" for="inputPhoneNo">Phone No </label>
+            <div class="controls">
+                <input type="text"  value="{{address.phone_no}}" class="form-control" name="phone_no">
+                <div class="text-danger">{{form.phone_no.errors}}</div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputAddress">Address </label>
+            <div class="controls">
+                <input type="text"  value="{{address.address}}" class="form-control" name="address">
+                <div class="text-danger">{{form.address.errors}}</div>
+            </div>
+        </div> 	  
+      <div class="control-group">
+          <div class="controls">
+              <br>
+           <input type="submit" name="submitAccount" value="Save" class="btn exclusive shopBtn">
+          </div>
+      </div>
+    </form>
+ </div>   
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="span9 container">
+    <ul class="breadcrumb">
+		<li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+		<li class="active">Email Confirmation</li>
+    </ul>
+	<div class="well well-small">
+	<h3>Confirm Your Email</h3>	
+	<hr class="soft"/>
+	
+	Please enter the confirmation code send to {{email}}.<br/><br/><br/>
+	<form class="form-inline" method="POST" action="{% url 'email_confirmation' %}">
+		<label class="control-label" for="inputEmail">E-mail address</label>
+		<input type="text" class="span4" placeholder="{{email}}">
+		<br>	
+		<label class="control-label" for="code">Confirmation Code</label>
+		<input type="text" class="span4" name="confirmation_code" id="code">
+		<br>		  
+		<button type="submit" class="btn shopBtn block">Submit</button>
+	</form>
+</div>
+</div>
+</div>
+{% endblock content %}

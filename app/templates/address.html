@@ -1,0 +1,36 @@
+{% extends 'base_user_profile.html' %}
+{% block profile %}
+
+<div class="row">
+    <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+        <li><a href="{% url 'profile' request.user %}">Account Overview</a> <span class="divider">/</span></li>
+        <li class="active">Addresses </li>
+        </ul>
+      <hr class="soft">
+{% for  address in addresses %}
+<div class="col-xs-12 col-sm-6" >
+    <article class="thumbnail well" style="height: 180px;">
+      <span>ADDRESSES &nbsp;&nbsp;&nbsp;&nbsp;
+        <form action="{% url 'address-edit' request.user address.id %}" method="POST" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="delete" value="delete">
+            <a href="#" onclick="this.parentNode.submit()"><i class="fas fa-trash link "></i></a>
+        </form>
+      <a href="{% url 'address-edit' request.user address.id %}" ><i class="fas fa-pen float-right link"></i></a><hr>
+     </span>
+     <span>{{address.full_name|upper}}</span><br>
+     <span>{{address.county|upper}}</span> <br>
+     <span class="text-muted">{{address.phone_no}}</span>
+     <br>
+     <span class="text-muted">{{address.address}}</span>
+    </article>
+  </div>
+{% endfor %}
+<div>
+    <a href="{% url 'address-add' request.user %}" class="btn btnDefault">Add Address 
+        <i class="fas fa-plus"></i>
+    </a>
+</div>
+</div>
+{% endblock %}

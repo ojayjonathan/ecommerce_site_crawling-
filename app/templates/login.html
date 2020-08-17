@@ -1,0 +1,136 @@
+{% extends 'base.html'%}
+{% block content %}
+<div class="container">
+	<ul class="breadcrumb">
+		<li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+		<li class="active">{% if register %}Register{% else %}Login{% endif %}</li>&nbsp;&nbsp;&nbsp;&nbsp;
+       {%if not register %}<li class="hidden-sm hidden-lg hidden-xl"><a href="{% url 'register' %}?next={{request.GET.next|urlencode}}">
+		 <input class="btn" type="button" value="Register">
+	   </a></li>{% endif %}
+	</ul>
+
+<div class="span1"> &nbsp;</div>	
+<div class="row">
+	<div class="alert alert-warning" role="alert">{{errors}}</div>
+	{% if not register %}
+<div class="col-sm-5 well col-xs-12">
+	<h3>Login</h3>
+	<hr class="soft">
+			<form method="POST" action="{% url 'login' %}">
+				{% csrf_token %}
+				<input type="hidden" name="next" value="{{request.GET.next}}">
+			  <div class="control-group">
+				<label class="control-label" for="inputEmail">Email</label>
+				<div class="controls">
+				  <input  type="email" placeholder="Email" required name="email" class="form-control">
+				  <div class="text-danger">{{login_form.email.errors}}</div>
+				</div>
+			  </div>
+			  <div class="control-group">
+				<label class="control-label" for="inputPassword">Password</label>
+				<div class="controls">
+				  <input type="password" placeholder="Password" required name="password" class="form-control">
+				  <div class="text-danger">{{login_form.password.errors}}</div>
+				</div>
+			  </div>
+			  <div class="control-group">
+				<div class="controls">
+					<br>
+				  <button type="submit" class="btn defaultBtn">Sign in</button> <a href="{% url 'reset-password' %}">Forget password?</a>
+				</div>
+				<div class="text-danger">{{login_errors}}</div>
+			  </div>
+			</form>
+</div>	
+ {%endif %}
+<div class="col-xs-12 col-sm-5 well col-sm-offset-2 hidden-xs">
+	<h3> Registration</h3>	
+	<hr class="soft"/>
+	<div class="">
+	<form method="POST" action="{% url 'register' %}">
+			{% csrf_token %}
+		<input type="hidden" name="next" value="{{request.GET.next}}">
+		<div class="control-group">
+			<label class="control-label" for="inputFname">First name <sup>*</sup></label>
+			<div class="controls">
+			  <input type="text" id="inputFname" placeholder="First Name" required name="first_name" class="form-control">
+			 <div class="text-danger">{{form.first_name.errors}}</div>
+			</div>
+		 </div>
+		 <div class="control-group">
+			<label class="control-label" for="inputLname">Last name <sup>*</sup></label>
+			<div class="controls">
+			  <input type="text" id="inputLname" placeholder="Last Name" required name="last_name" class="form-control">
+			  <div class="text-danger">{{form.last_name.errors}}</div>
+			</div>
+		 </div>
+		<div class="control-group">
+		<label class="control-label" for="inputEmail">Email <sup>*</sup></label>
+		<div class="controls">
+		  <input type="email" placeholder="Email" required name="email" class="form-control">
+		  <div class="text-danger">{{form.email.errors}}</div>
+		</div>
+	  </div>	  
+		<div class="control-group">
+		<label class="control-label">Password <sup>*</sup></label>
+		<div class="controls">
+		  <input type="password" placeholder="Password" required name="password" class="form-control">
+		  <div class="text-danger"> {{form.password.errors}}</div>
+		</div>
+	  </div>
+	<div class="control-group">
+		<div class="controls">
+			<br>
+		 <input type="submit" name="submitAccount" value="Register" class="exclusive shopBtn">
+		</div>
+	</div>
+	</form>
+</div>		
+	
+</div>
+{% if register %}
+<div class="col-xs-12 hidden-sm hidden-lg hidden-xl well">
+<h3> Registration</h3>	
+<hr class="soft"/>
+<form method="POST" action="{% url 'register' %}">
+	{% csrf_token %}
+	<input type="hidden" name="next" value="{{request.GET.next}}">
+	<div class="control-group">
+		<div class="controls">
+		  <input type="text" id="inputFname" placeholder="First Name" required class="form-control">
+		  <div class="text-danger">{{form.first_name.errors}}</div>
+		</div>
+	 </div>
+	 <div class="control-group">
+		<label class="control-label" for="inputLname">Last name <sup>*</sup></label>
+		<div class="controls">
+		  <input type="text" id="inputLname" placeholder="Last Name" required class="form-control">
+		  <div class="text-danger">{{form.last_name.errors}}</div>
+		</div>
+	 </div>
+	<div class="control-group">
+	<label class="control-label" for="inputEmail">Email <sup>*</sup></label>
+	<div class="text-danger">{{form.email.errors}}</div>
+	<div class="controls">
+	  <input type="email" placeholder="Email" required name="email" class="form-control">
+	</div>
+  </div>	  
+	<div class="control-group">
+	<label class="control-label">Password <sup>*</sup></label>
+	<div class="controls">
+	  <input type="password" placeholder="Password" required name="password" class="form-control">
+	  <div class="text-danger"> {{form.password.errors}}</div>
+	</div>
+  </div>
+<div class="control-group">
+	<div class="controls">
+		<br>
+	 <input type="submit" name="submitAccount" value="Register" class="btn exclusive shopBtn">
+	</div>
+</div>
+</form>
+</div>
+{% endif %}
+</div>
+</div>
+{% endblock content %}

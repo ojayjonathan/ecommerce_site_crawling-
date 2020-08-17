@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load humanize %}
+<style>
+   .well,li{margin-bottom: 0;
+	padding-bottom: 0;}
+	@media (min-width:500px){
+		.xs{display: none;}
+	}
+</style>
+<div class="row">
+	<div id="sidebar" class="col-sm-4 col-xs-6 col-md-3">
+		<button onclick="closeNav()" type="button" class="close pull-right hidden-sm hidden-md hidden-lg hidden-xl" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+	<div class="well well-small">
+		<ul class="nav nav-list">
+			{% for category in product_categories %}
+			  {% for i in category.sub_categories %}
+				  <li><a href="{% url 'subcategory'  i|slugify %}"><i class="fas fa-chevron-right"></i>{{ i|capfirst}}</a></li>          
+			   {% endfor %}
+			{% endfor %}
+			  <li style="border:0"> &nbsp;</li>
+		  </ul>
+	</div>
+	
+  </div>
+  <div class="span9 col-xs-12 col-sm-8 col-md-9">
+<div class="span12">
+    <ul class="breadcrumb">
+		<li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+		<li class="active">Check Out</li>
+    </ul>
+	<div class="well well-small">
+		<h3>Check Out <span class="pull-right">Items ({{length}}) </span></h3>	
+	</div>
+	<hr class="soften"/>
+</div>		
+	{% for item in items %}	
+<div class="thumbnails row well span4">
+			<div class="col-xs-6 col-sm-4 col-md-3">
+				<img class="img-thumbnail" src='{{item.product.image_src}}' alt="product image" style="width: 100%; max-width: 200px;">
+			</div>
+		  <div class="col-xs-6 ">
+			<h5>{{item.product.description}}</h5>
+			<span class="price">Ksh {{item.product.price|intcomma}}</span> &nbsp;&nbsp;&nbsp;
+			<s>Ksh {{item.product.prev_price|intcomma}}</s>
+		  </div>
+		  <br>
+		  <ul class="nav nav-pills pull-right">
+			<li>
+			  <form action="{% url 'cart' %}"  method="POST">
+				  {% csrf_token %}
+				  <input type="hidden" value="{{item.product.id}}" name="product_id">
+				  <input type="hidden" name="action" value="delete">
+				  <button class="btn btn-mini btn-danger" type="submit"><span class="fas fa-trash"></span></button>
+				  <span class="text-center">REMOVE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			  </form>
+		   </li>
+			<li>
+			  <form action="{% url 'cart' %}"  style="width: 40px;" method="POST">
+				  {% csrf_token %}
+				  <input type="hidden" value="{{item.product.id}}" name="product_id">
+				  <input type="hidden" name="action" value="add">
+				  <button class="btn btn-mini"  type="submit" style="background: #f89406;"><i class="fas fa-plus"></i></button>
+			  </form>	  
+			</li>
+			<li><span class="form-control pull-right">{{item.count}}</span> </li>
+			<li>
+			  <form action="{% url 'cart' %}" class="form-inline" method="POST">
+				  {% csrf_token %}
+				  <input type="hidden" value="{{item.product.id}}" name="product_id">
+				  <input type="hidden" name="action" value="subtract">
+				  <button class="btn btn-mini d-inline pull-right" type="submit" style="background: #f89406;"><i class="fas fa-minus"></i></button>
+			   </form>
+			   &nbsp;&nbsp;&nbsp;&nbsp;
+			</li>
+		  </ul>  
+		  <br>	  
+</div>
+<br>
+	{% endfor %}
+
+  
+
+ <div class="col-lg-8 col-sm-10 col-sm-offset-2 col-lg-offset-4">
+	 <table class="table table-bodered table-condensed table-striped well  checkoutTable">
+		 <thead>
+			 <th scope="col">Item</th>
+			 <th scope="col">Quantity</th>
+			 <th scope="col">Amount(Ksh)</th>
+			 <th scope="col">Sub Total(Ksh)</th>
+		 </thead>
+		 <tbody>
+			 {% for item in items %}
+			 <tr>
+				 <td>{{item.product.description|slice:'10'}}</td>
+				 <td>{{item.count}}</td>
+				 <td>{{item.product.price|intcomma}}</td>
+				 <td>{{item.total|intcomma}}</td>
+			 </tr>
+			 {% endfor %}
+			 <tr>
+				<th scope="col">Sub Total</th>
+				<th scope="col"></th>
+				<th scope="col" class="price">Ksh</th>
+				<th scope="col" class="price text"><strong>{{total|intcomma}}</strong> </th>
+			 </tr>
+			 <tr>
+				<th scope="col">Vat</th>
+				<th scope="col" ></th>
+				<th scope="col" class="price">Ksh</th>
+				<th scope="col" class="price"><strong>0</strong></th>
+			 </tr>
+		 </tbody>
+		 
+	 </table>
+    <br>
+ </div>
+ 
+<div class="cntr xs">
+	<h4 class="shopBtn btn">Total Ksh {{total|intcomma}}</h4>
+</div>
+<br>
+<table class="table table-bordered well">
+		<tbody><tr><td> 
+			<form class="form-inline">
+			  <label style="min-width:159px"> VOUCHERS Code: </label> 
+			  <input type="text" class="input-medium" placeholder="CODE">
+			  <button type="submit" class="btn shopBtn"> ADD</button>
+			</form></td></tr>
+		</tbody>
+	</table>
+	<br>
+<a href="{{request.GET.next|default:'/'}}" class="shopBtn btn "><i class="fas fa-arrow-left"></i> Continue Shopping </a>
+<a href="{% url 'login' %}" class="shopBtn btn pull-right ">Next <i class="fas fa-arrow-right"></i></a>
+  </div></div>
+{% endblock content %}

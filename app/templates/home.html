@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="row">
+    <div id="sidebar" class="col-md-3 col-sm-4  span3">
+      <button onclick="closeNav()" type="button" class="close pull-right hidden-sm hidden-md hidden-lg hidden-xl" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    <div class="well well-small">
+      <ul class="nav nav-list">
+        
+        {% if not request.user.is_authenticated %}
+        <li class="bg-light"><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+        {% endif %}
+          {% for category in product_categories %}
+                 {% for i in category.sub_categories %}
+                 <li><a href="{% url 'subcategory'  i|slugify %}"><i class="fas fa-chevron-right"></i>{{ i|capfirst}}</a>
+                 {% endfor %}           
+          {% endfor %}
+            <li style="border:0"> &nbsp;</li>
+            
+            <li> <a class="totalInCart" href="{% url 'cart' %}"><strong>Total Amount  <span class="badge badge-warning pull-right" style="line-height:18px;">$448.42</span></strong></a></li>
+          </ul>
+    </div>
+    <div class="well">
+      {% if request.user.is_authenticated %}
+      <ul class="nav nav-list">
+        <span>&nbsp;&nbsp;&nbsp; Hi, {{profile.first_name|default:request.user}}</span>
+        <li><a href="{% url 'profile' request.user %}"><i class="fas fa-user"></i>  Your Acount</a></li> 
+        <li><a href="{% url 'profile-edit' request.user  %}"><i class="fas fa-user-edit"></i>  Personal Information</a></li> 
+        <li><a href="{% url 'addresses' request.user  %}"><i class="fas fa-envelope"></i>  Address</a></li> 
+        <li><a href="{% url 'history' request.user %}"><i class="fas fa-calendar-alt"></i>  Shipping History</a></li> 
+        <hr class="soft">
+        <li class="bg-light"><a href="{% url 'logout'  %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>    
+       </ul>
+            {% endif %}
+ 
+      </div>
+    
+      <div class="well well-small alert alert-warning cntr hidden-xs">
+                      <h2>50% Discount</h2>
+                      <p> 
+                         only valid for online order. <br><br><a class="defaultBtn" href="#">Click here </a>
+                      </p>
+                  </div>
+                  <div class="well well-small hidden-xs" ><img src='{% static "assets/img/paypal.jpg" %}' alt="payment method paypal" class="img-thumbnail"></div>
+                <br>
+                <br>
+  </div>
+  <div class="span9 col-md-9 col-sm-8">
+    <ul class="breadcrumb">
+      <li class="active">Home <span class="divider">/</span></li>
+      </ul>	
+        <div class="well np" >
+            <div id="myCarousel" class="carousel slide homCar">
+                <div class="carousel-inner">
+                  <div class="item">
+                    <img style="width:100%" src='{% static "assets/img/bootstrap_free-ecommerce.png" %}' alt="bootstrap ecommerce templates">
+                  </div>
+                  <div class="item">
+                    <img style="width:100%" src='{% static "assets/img/carousel1.png" %}' alt="bootstrap ecommerce templates">
+                  </div>
+                  <div class="item active">
+                    <img style="width:100%" src='{% static "assets/img/carousel3.png" %}' alt="bootstrap ecommerce templates">
+                    
+                  </div>
+                  <div class="item">
+                    <img style="width:100%" src='{% static "assets/img/bootstrap-templates.png" %}' alt="bootstrap templates">
+                  </div>
+                </div>
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+              </div>
+            </div>
+    
+        
+        <!--
+        Featured Products
+        -->
+      
+            <div class="well well-small">
+              <h3><a class="btn btn-mini pull-right" href="products.html" title="View more">VIew More <i class="fas fa-plus"></i></a> Featured Products  </h3>
+              <hr class="soften"/>
+              <div class="row">
+                <div class="thumbnails" style="margin: 0;">
+                  {% for product in products %}
+                    <article class="span4 col-sm-4 col-xs-4 col-md-3">
+                    <div class="thumbnail" style="overflow: hidden;">
+                      <span class="discount-tag" >{% if product.per_discount > 0 %}
+                        -{{product.per_discount}}% {% endif%}</span>
+                      <a class="zoomTool" href="{% url 'detail' product.category product.id %}" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+                      <a  href="{% url 'detail' product.category product.id %}"><img src='{{product.image_src}}' alt=""></a>
+                      <div class="caption">
+                        <div class="product-name" style="max-width: 90%;">{{product.description}}</div>
+                        <div class="price-info" style="height: 40px;">
+                            <!--<a class="shopBtn" href="#" title="add to cart"><span class="icon-plus"></span></a>
+                            --><span class="price">Ksh {{product.price|intcomma}}</span>
+                            <del class="prev-price">{% if product.price != product.prev_price %}
+                              Ksh{{product.prev_price|intcomma}} {% endif %}</del>
+                        </div>
+                      </div>
+                    </div>
+                    </article>
+                  
+                  {% endfor %}
+                 {% if products.has_next %} 
+                  <a class="btn btn-mini pull-right" href="{% url 'home' %}?page={{products.next_page_number}}" title="View more">VIew More <i class="fas fa-plus"></i></a>
+                 {% endif %}
+                </div>
+        </div>
+        </div>
+        
+        <div class="well well-small">
+        <a class="btn btn-mini pull-right" href="#">View more <i class="fas fa-plus"></i></a>
+        Popular Products 
+        </div>
+        <hr>
+        <div class="well well-small">
+        <a class="btn btn-mini pull-right" href="#">View more <i class="fas fa-plus"></i></a>
+        Best selling Products 
+        </div>
+        </div>
+        </div>
+<style>
+  ul{list-style: none;}
+</style>
+{% endblock content %}

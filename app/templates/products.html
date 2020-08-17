@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{%block content %}
+{% load humanize %}
+<div class="row">
+  <div id="sidebar" class="col-sm-4 col-xs-6 col-md-3">
+    <button onclick="closeNav()" type="button" class="close pull-right hidden-sm hidden-md hidden-lg hidden-xl" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>  
+  <div class="well well-small">
+      <ul class="nav nav-list">
+        {% for category in product_categories %}
+          {% for i in category.sub_categories %}
+              <li><a href="{% url 'subcategory'  i|slugify %}"><i class="fas fa-chevron-right"></i>{{ i|capfirst}}</a></li>          
+           {% endfor %}
+        {% endfor %}
+          <li style="border:0"> &nbsp;</li>
+      </ul>
+  </div>
+  
+</div>
+<div class="span9 col-xs-12 col-sm-8 col-md-9">
+          <div class="well">
+            <ul class="breadcrumb">
+              <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+              <li class="active">{{category | title}} <span class="divider">/</span></li>
+            </ul>
+          <div class="row" >
+              <small class="text-muted" style="margin-left: 30px;">{{items_found}} items found</small>
+              <strong class="pull-right " style="margin-right: 20px;">{{products.number}} out of {{products.paginator.num_pages}}</strong>   
+            <div class="thumbnails" style="margin: 0;">
+                {% for product in products %}
+                  <article class="span4 col-sm-4 col-xs-4 col-md-3">
+                  <div class="thumbnail" style="overflow: hidden;">
+                    <span class="discount-tag" >{% if product.per_discount > 0 %}
+                      -{{product.per_discount}}% {% endif%}</span>
+                    <a class="zoomTool" href="{% url 'detail' product.category product.id %}?next={{request.path}}" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+                    <a  href="{% url 'detail' product.category product.id %}?next={{request.path}}"><img src='{{product.image_src}}' alt=""></a>
+                    <div class="caption">
+                      <div class="product-name" style="max-width: 90%;">{{product.description}}</div>
+                      <div class="price-info" style="height: 40px;">
+                          <!--<a class="shopBtn" href="#" title="add to cart"><span class="icon-plus"></span></a>
+                          --><span class="price">Ksh {{product.price|intcomma}}</span>
+                          <del class="prev-price">{% if product.price != product.prev_price %}
+                            Ksh{{product.prev_price|intcomma}} {% endif %}</del>
+                      </div>
+                    </div>
+                  </div>
+                  </article>
+                {% endfor %}
+            </div>
+      </div>
+    </div>  
+     
+      <hr>
+      <nav>
+        <ul class="pagination pagination-lg">
+          {% if products.has_previous %}
+            <li class="page-item">
+              <a href="{% url 'subcategory' category %}?page={{products.previous_page_number}}">&laquo;</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled" ><a href="">&laquo;</a></li>
+          {% endif %}
+            <li class="page-item">
+              <span>{{products.number}} out of {{products.paginator.num_pages}}</span>
+             </li>
+           {% if products.has_next %}
+           <li class="page-item"><a href="{% url 'subcategory' category %}?page={{products.next_page_number}} ">
+                &raquo;
+              </a></li>
+           {% else %}
+              <li class="page-item disabled"><span>&raquo;</span></li>
+           {% endif %}       
+        </ul>
+      </nav>
+    </div>
+
+    </div>
+{% endblock content %}

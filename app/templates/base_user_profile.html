@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content  %}
+<div class="row">
+    <div id="sidebar" class="col-md-3 col-sm-4  span3">
+        <button onclick="closeNav()" type="button" class="close pull-right hidden-sm hidden-md hidden-lg hidden-xl" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      <div class="well">
+        <div style="width: 120px; margin: auto;">
+          <img src="{{profile.thumbnail.url}}" alt="" class="profile-pic mx-auto"></div>
+        <ul class="nav nav-list">
+              <span>&nbsp;&nbsp;&nbsp; Hi, {{profile.first_name|default:request.user}}</span>
+              <li><a href="{% url 'profile' request.user.username %}"><i class="fas fa-user"></i>  Your Acount</a></li> 
+              <li><a href="{% url 'profile-edit' request.user.username  %}"><i class="fas fa-user-edit"></i>  Personal Information</a></li> 
+              <li><a href="{% url 'addresses' request.user.username  %}"><i class="fas fa-envelope"></i>  Address</a></li> 
+              <li><a href="{% url 'history' request.user.username %}"><i class="fas fa-calendar-alt"></i>  Shipping History</a></li> 
+              <hr class="soft">
+              <li class="bg-light"><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>    
+        </ul>
+        </div>
+    </div>
+    <div class="col-md-9 col-sm-8" style="padding-right: 0;">
+        {% block profile %}
+        <ul class="breadcrumb">
+          <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+          <li class="active">Account Overview</li>
+          </ul>
+        <hr class="soft">
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <article class="thumbnail well" style="height: 180px;">
+              <span>ACCOUNT DETAILS
+                <a href="{% url 'profile-edit' request.user  %}" >
+                   <i class="fas fa-pen float-right link"></i>
+                </a>
+              </span>  
+                <hr>
+                <span>{{profile.first_name|lower|capfirst}} {{profile.last_name|lower|capfirst}}</span><br>
+                <span class="text-muted">{{profile.email}}</span>
+                <br><br>
+                <a href="{% url 'change-password' request.user %}" class="link"><span>CHANGE PASSWORD</span></a>
+            </article>
+          </div>
+          
+           <div class="col-xs-12 col-sm-6" >
+             <article class="thumbnail well" style="height: 180px;">
+               <span>ADDRESSES
+              <a href="{% if address %}{% url 'address-edit' request.user address.id %}{% endif %}" ><i class="fas fa-pen float-right link"></i></a><hr>
+              </span>
+              <span>{{address.full_name}}</span><br>
+              <span>{{address.county}}</span> <br>
+              <span class="text-muted">{{address.phone_no}}</span>
+              <br>
+              <span class="text-muted">{{address.address}}</span>
+             </article>
+           </div>
+           <div class="col-xs-12 col-sm-6" >
+            <article class="thumbnail well" style="height: 180px;">
+              <span>SUBSCRIPTIONS </span><hr>
+              <br>
+              <br>
+              <a href="" class="link"><span>SUBSCRIBE TO OUR NEWSLATER</span></a>
+
+            </article>
+          </div>
+          <div class="col-xs-12 col-sm-6" >
+            <article class="thumbnail well" style="height: 180px;">
+              <span>PAYMENT METHODS</span><hr>
+
+            </article>
+          </div>
+        </div> 
+
+        {% endblock %}
+    </div>
+    <style>
+      @media (max-width: 500px){
+        .thumbnail{
+          margin-bottom: 20px;
+        }
+      }
+    </style>
+</div>
+{% endblock content %}

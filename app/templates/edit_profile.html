@@ -1,0 +1,42 @@
+{% extends 'base_user_profile.html' %}
+{% block profile %}
+<div class="well">
+  <ul class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+    <li><a href="{% url 'profile' request.user %}">Account Overview</a> <span class="divider">/</span></li>
+    <li class="active">Edit Account </li>
+    </ul>
+  <hr class="soft">
+    <form method="POST" action="{% url 'profile-edit' request.user %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{request.GET.next}}">
+        <div class="control-group">
+          <label class="control-label" for="inputFname">First name </label>
+            <div class="controls">
+              <input type="text" id="inputFname" value="{{profile.first_name}}" class="form-control" name="first_name">
+              <div class="text-danger">{{form.first_name.errors}}</div>
+            </div>
+         </div>
+         <div class="control-group">
+            <label class="control-label" for="inputLname">Last name </label>
+            <div class="controls">
+              <input type="text" id="inputLname" value="{{profile.last_name}}" class="form-control" name="last_name">
+              <div class="text-danger">{{form.last_name.errors}}</div>
+            </div>
+         </div>
+        <div class="control-group">
+        <label class="control-label" for="inputEmail">Email </label>
+        <div class="controls">
+          <input type="email"  value="{{profile.email}}" class="form-control" name="email">
+          <div class="text-danger">{{form.email.errors}}</div>
+        </div>
+      </div>	  
+    <div class="control-group">
+        <div class="controls">
+            <br>
+         <input type="submit" name="submitAccount" value="Save" class="btn exclusive shopBtn">
+        </div>
+    </div>
+    </form>
+</div>
+{% endblock %}

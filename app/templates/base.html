@@ -1,0 +1,263 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}home {% endblock title%}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<!-- Bootstrap styles -->
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /> 
+	<!--<link href='{% static "assets/css/bootstrap.css" %}' rel="stylesheet"/>
+     Customize styles -->
+    <link href='{% static "style.css" %}' rel="stylesheet"/>
+    <!-- font awesome styles -->
+	<!--<link href='{% static "assets/font-awesome/css/font-awesome.css" %}' rel="stylesheet">
+		[if IE 7]>
+			<link href='{% static "css/font-awesome-ie7.min.css" %}' rel="stylesheet">
+		<![endif]-->
+
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+	<!-- Favicons -->
+    <link rel="shortcut icon" href='{% static "assets/ico/favicon.ico" %}'>
+  </head>
+<body onload="LoadingComplete()">
+	<div class="loading-overlay ">
+       <span class="fas fa-spinner fa-3x fa-spin"></span>
+	</div>
+
+<div class="container1">
+<div id="gototop"> </div>
+<header id="header">	
+	<div class="span4 alignR container"  id="top">
+</div>
+</header>
+<style>
+.loading-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 9998;}
+
+.fa-spinner{
+	position: relative;
+	color: #ffff;
+	top: 50%;
+	left: 50%;
+}
+
+	@media (max-width: 767px)
+	{
+		#search {display: none;}
+		#sidebar{display: none;}
+		#nav-open{display: block;background-color: #f5f5f5; border: 1px solid #e4e1e1;}
+	}
+	
+	.items{
+		position: absolute;
+		color:#ffff;
+		left: 50%;
+		font-size: 16px;
+		font-weight: bolder;
+		background: #ff9500fd;
+		border-radius: 50%;
+		width: 20px;
+		height: 20px;
+		text-align: center;}
+
+    
+	.nav>li>button{display: none;}
+	
+
+	@media (max-width: 500px){
+		.col-xs-4{
+			width: 50%;
+		}
+		 .price-info{
+			height:40px;
+		}
+		.product-name{
+			white-space: nowrap;;
+			overflow-wrap: break-word;
+		}
+		.well{
+			margin: 0;
+			padding: 0 5px 20px 5px;
+			width: 100%;
+		}
+		.span9{
+			padding: 0;
+		}
+		article.span4{
+			padding-right: 0;
+		}
+		.row{margin-right: 0;}
+	    .checkoutTable{
+			display: none;
+		}
+		.thumbnail{
+			margin-bottom: 5px;
+		}
+	}
+	.fa-check{
+		position: absolute;
+		background-color: rgba(19, 56, 11, 0.808);
+		border-radius: 50%;
+		color: #ffffff;
+		left: 20%;
+		top:20%;
+	}
+	.product-name{
+		white-space:nowrap; overflow: hidden; text-overflow: ellipsis;
+	}
+	.profile-pic{
+		border-radius: 50%;
+		margin: 0 15px 15px 10px;
+		width: 100px;
+		height: 100px;
+		margin: auto;
+
+	}
+	.float-right{
+		float: right;
+	}
+	.link, .link:hover{
+		color: #f89406;
+	}
+	input.form-control{
+      max-width: 400px;
+	}
+	.floatL{
+		float: left;
+	}
+	.nav>li>a>img{
+		padding-top: 5px;
+		max-width: 150px;
+	}
+	.nav.nav-pills>li>a {
+    position: relative;
+    display: block;
+    padding: 0px 5px;}
+	.nav-icon{
+		padding-top: 10px;
+		color: rgba(2, 2, 2, 0.808);
+	}
+</style>
+<ul class="nav nav-pills">
+	<li class="presentation">
+	  <button class="btn" onclick="openNav()" style="padding: 0;" id="nav-open"><i class="fas fa-bars fa-3x"></i></button>
+	</li>
+	<li class="presentation">
+		<a href="{% url 'home' %}">
+		<img src='{% static "assets/img/logo-bootstrap-shoping-cart.png" %}' alt="bootstrap sexy shop"></li>
+	    </a>
+	<li class="presentation pull-right">
+		<a href='{% url "cart"%}?next={{request.path|urlencode}}' ><span class="stack-icon">
+			<i class="fas fa-shopping-cart fa-2x nav-icon" ></i>
+			<span class="items">10</span>
+		</span>
+	</li>
+	<li class="presentation pull-right">{% if request.user.is_authenticated %}
+		<a href='{% url "profile" request.user %}?next={{request.path|urlencode}}'>
+		<i class="fas fa-user-check fa-2x nav-icon" ></i></a>
+	 {% else %}
+		 <a href='{% url "login" %}?next={{request.path|urlencode}}' >
+		 <i class="fas fa-user fa-2x nav-icon "></i></a>
+	 {% endif %}
+
+	</li>	
+</ul>
+    <div class="cntr" style="margin:auto; max-width:500px;">
+		<form class="form-inline">
+			<div class="controls">
+				<input class="form-control" type="search" placeholder="Search" aria-label="Search" style="margin: auto;">
+			    <button class="btn btn-outline-success my-2 my-sm-0 " type="submit" id='search'>Search</button>
+			</div>
+		  </form>
+	</div>
+  <br>
+{% block content %}
+{% endblock content %}
+		
+
+<!--
+Footer
+-->
+<footer class="footer container-fluid">
+<div class="row" >
+	<div class="col-xs-6 col-sm-4 col-md-4 col-xl-3 ">
+	<h5>Your Account</h5>
+	    <a href="{% url 'profile' request.user.username %}">  YOUR ACCOUNT</a><br>
+        <a href="{% url 'profile-edit' request.user.username  %}">PERSONAL INFORMATION</a><br>
+        <a href="{% url 'addresses' request.user.username  %}"> ADDRESS</a><br>
+        <a href="{% url 'history' request.user.username %}">ORDER HISTORY</a>
+	</div>
+	<div class="col-xs-6 col-sm-4 col-md-4 col-xl-3 ">
+	<h5>Information</h5>
+	<a href="{% url 'contact' %}">CONTACT</a><br>
+	<a href="#">SITEMAP</a><br>
+	<a href="#">LEGAL NOTICE</a><br>
+	<a href="#">TERMS AND CONDITIONS</a><br>
+	<a href="{% url 'about' %}">ABOUT US</a><br>
+	</div>
+	<div class="col-xs-6 col-sm-4 col-md-4 col-xl-3">
+	<h5>Our Offer</h5>
+	<a href="#">NEW PRODUCTS</a> <br>
+	<a href="#">TOP SELLERS</a><br>
+	<a href="#">SPECIALS</a><br>
+	<a href="#">MANUFACTURERS</a><br>
+	<a href="#">SUPPLIERS</a> <br/>
+	</div>
+ </div>
+</footer>
+</div><!-- /container -->
+
+<div class="copyright">
+<div class="container">
+	<p class="pull-right">
+		<a href="#"><img src='{% static "assets/img/maestro.png" %}' alt="payment"></a>
+		<a href="#"><img src='{% static "assets/img/mc.png" %}' alt="payment"></a>
+		<a href="#"><img src='{% static "assets/img/pp.png" %}' alt="payment"></a>
+		<a href="#"><img src='{% static "assets/img/visa.png" %}' alt="payment"></a>
+		<a href="#"><img src='{% static "assets/img/disc.png" %}' alt="payment"></a>
+	</p>
+	<span>Copyright &copy; 2013<br> bootstrap ecommerce shopping template</span>
+</div>
+</div>
+
+<a href="#top" class="gotop"><i class="fas fa-angle-double-up"></i></a>
+    <script src='{% static "assets/js/jquery.js" %}'></script>
+	<script src='{% static "assets/js/bootstrap.min.js" %}'></script>
+	<script src='{% static "assets/js/jquery.easing-1.3.min.js" %}'></script>
+    <script src='{% static "assets/js/jquery.scrollTo-1.4.3.1-min.js" %}'></script>
+    <script src='{% static "assets/js/shop.js" %}'></script>
+<script>
+function LoadingComplete(){
+	$('.loading-overlay').css({'display':'none'})
+}	
+function openNav() {
+  document.getElementById("sidebar").style.width = "250px";
+  document.getElementById("sidebar").style.display = "block";
+  document.getElementById("sidebar").style.position = "absolute";
+  document.getElementById("sidebar").style.zIndex = "5";}
+function closeNav() {
+  document.getElementById("sidebar").style.display = "none";}
+ $(document).ready(function(){
+	var max_h = 0
+     $('article.span4').each(function(){
+		if($(this).outerHeight()>max_h){
+			 max_h = $(this).outerHeight();}})
+	 $('article.span4').each(function(){
+        if($(this).outerHeight()< max_h){
+        $(this).css({'height':max_h})
+		}})})
+</script>
+</body>
+</html>
