@@ -57,7 +57,7 @@
 	{
 		#search {display: none;}
 		#sidebar{display: none;}
-		#nav-open{display: block;background-color: #f5f5f5; border: 1px solid #e4e1e1;}
+		#nav-open{display: block;background-color: transparent; border: 1px solid #e4e1e1;}
 	}
 	
 	.items{
@@ -194,10 +194,17 @@ Footer
 <div class="row" >
 	<div class="col-xs-6 col-sm-4 col-md-4 col-xl-3 ">
 	<h5>Your Account</h5>
-	    <a href="{% url 'profile' request.user.username %}">  YOUR ACCOUNT</a><br>
-        <a href="{% url 'profile-edit' request.user.username  %}">PERSONAL INFORMATION</a><br>
-        <a href="{% url 'addresses' request.user.username  %}"> ADDRESS</a><br>
-        <a href="{% url 'history' request.user.username %}">ORDER HISTORY</a>
+		{% if request.user.is_authenticated %}
+		 <a href="{% url 'profile' request.user.username %}">  YOUR ACCOUNT</a><br>
+         <a href="{% url 'profile-edit' request.user.username  %}">PERSONAL INFORMATION</a><br>
+         <a href="{% url 'addresses' request.user.username  %}"> ADDRESS</a><br>
+         <a href="{% url 'history' request.user.username %}">ORDER HISTORY</a>
+		{% else %}
+		<a href="{% url 'login' %}">  YOUR ACCOUNT</a><br>
+        <a href="{% url 'login'  %}">PERSONAL INFORMATION</a><br>
+        <a href="{% url 'login'  %}"> ADDRESS</a><br>
+        <a href="{% url 'login' %}">ORDER HISTORY</a>
+		{% endif %}
 	</div>
 	<div class="col-xs-6 col-sm-4 col-md-4 col-xl-3 ">
 	<h5>Information</h5>
@@ -249,15 +256,16 @@ function openNav() {
   document.getElementById("sidebar").style.zIndex = "5";}
 function closeNav() {
   document.getElementById("sidebar").style.display = "none";}
- $(document).ready(function(){
+  $(document).ready(function(){
+	 $('article.span4').each(function(){
+        if($(this).outerHeight()>max_h){
+			max_h = $(this).outerHeight()		
+		}})})
 	var max_h = 0
      $('article.span4').each(function(){
-		if($(this).outerHeight()>max_h){
-			 max_h = $(this).outerHeight();}})
-	 $('article.span4').each(function(){
-        if($(this).outerHeight()< max_h){
-        $(this).css({'height':max_h})
-		}})})
+		if($(this).outerHeight()< max_h){
+			$(this).css({'height':max_h});}})
+			 
 </script>
 </body>
 </html>
