@@ -4,4 +4,11 @@
 *.pyc
 __pycache__/
 local_settings.py
-
+requrement.txt
+runtime.txt
+db.sqlite
+Procfile
+/migrations/
+/__pycache__/
+/static/img/
+/img/

@@ -149,14 +149,18 @@
 		padding-top: 10px;
 		color: rgba(2, 2, 2, 0.808);
 	}
+	.brand a{
+		color: #333!important;
+		letter-spacing: .2rem;
+	}
 </style>
 <ul class="nav nav-pills">
 	<li class="presentation">
 	  <button class="btn" onclick="openNav()" style="padding: 0;" id="nav-open"><i class="fas fa-bars fa-3x"></i></button>
 	</li>
-	<li class="presentation">
+	<li class="presentation brand">
 		<a href="{% url 'home' %}">
-		<img src='{% static "assets/img/logo-bootstrap-shoping-cart.png" %}' alt="bootstrap sexy shop"></li>
+		<h1>Best Deals</h1>
 	    </a>
 	<li class="presentation pull-right">
 		<a href='{% url "cart"%}?next={{request.path|urlencode}}' ><span class="stack-icon">
